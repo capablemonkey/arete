@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "google-autocomplete": "*",
+    "mocha": "1.21",
+    "request": "2.40"
+  }
+}
