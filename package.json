@@ -23,6 +23,6 @@
     "exec-time": "git+https://github.com/capablemonkey/exec-time#e39279713fcb87a9c9e27f5a81d913d7b6853c3d",
     "mocha": "1.21",
     "mockery": "^1.4.0",
-    "underscore": "1.6.0",
+    "underscore": "1.6.0"
   }
 }
