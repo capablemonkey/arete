@@ -10,24 +10,64 @@ Easily write a batch of load tests and organize them with `mocha`.
 
 ## Example
 
+Let's make 1000 GET requests to `https://news.ycombinator.com/`:
+
 ```
 var arete = require('arete');
 var request = require('request');
 
 arete.loadTest({
   name: 'hn-1000',
-  requests: 50,
-  concurrentRequests: 50,
+  requests: 1000,
+  concurrentRequests: 100,
   targetFunction: function(callback) {
     request('https://news.ycombinator.com/', function(error, response, body) {
       callback(error, body);
     })
   },
-  printResponses: false,
-  printReport: true,
-  printSteps: true,
   callback: function() {}
 });
+```
+
+When we run this, we'll start making those requests...
+
+```
+hn-1000 - Begin profiling
+hn-1000 - Starting to make requests - 0.129 ms (total: 0.273 ms)
+hn-1000 - Sending request #0 - 0.303 ms (total: 0.645 ms)
+hn-1000 - Sending request #1 - 3.282 ms (total: 3.976 ms)
+hn-1000 - Sending request #2 - 0.443 ms (total: 4.469 ms)
+hn-1000 - Sending request #3 - 0.256 ms (total: 4.767 ms)
+```
+
+As the responses come in, we note the time since the last response and the total elapsed time so far
+
+```
+hn-1000 - All requests fired off - 0.099 ms (total: 15.177 ms)
+hn-1000 - Received response for request #0 - 419.252 ms (total: 434.460 ms)
+hn-1000 - Received response for request #27 - 5.720 ms (total: 440.317 ms)
+hn-1000 - Received response for request #42 - 5.080 ms (total: 445.475 ms)
+hn-1000 - Received response for request #25 - 8.148 ms (total: 453.684 ms)
+hn-1000 - Received response for request #49 - 11.850 ms (total: 465.596 ms)
+```
+
+Notice that the responses won't necessarily come in the order which they were sent.
+
+When all the responses have arrived, we spit out a report:
+
+```
+ === LOOK MA', STATS! ===
+50 requests fired, of which we got back 50 successful responses (100.00% success rate)
+
+Longest time between responses:  419.238441 ms
+Shortest time between responses:  0.70436 ms
+Average response time interval:  19.629927020000004 ms
+
+Shortest response time:  434.612736 ms
+Longest response time:  1003.092273 ms
+Average response time:  679.37676786 ms
+
+Total test duration:  1003.092273 ms
 ```
 
 Here's a mocha test suite which uses arete and the `google-autocomplete` module to query Google's search suggestion service 1000 times.
@@ -49,27 +89,19 @@ describe('Google Autocomplete', function() {
         autocomplete.getQuerySuggestions('foo', callback);
       },
       printResponses: false,
-      callback: done
+      callback: function(error, report) {       
+        assert.equal(report.successfulResponses.length, report.results.length, "We didn't get all successful responses!");
+        assert(report.averageResponseTimeInterval < 100, "Time between responses is way too long!");
+        assert(report.timeElapsed < 20000, "Unacceptable amount of time for 1000 requests to complete: 20 seconds");
+        done();
+      }
     });
 
   });
 });
 ```
 
-You'll get something like...
-
-```
-  Google Autocomplete
-google-1000 - Begin profiling
-google-1000 - Starting to make requests - 0.135 ms (total: 0.274 ms)
-google-1000 - Sending request #0 - 0.335 ms (total: 0.680 ms)
-google-1000 - Sending request #1 - 3.242 ms (total: 3.974 ms)
-google-1000 - Sending request #2 - 0.487 ms (total: 4.511 ms)
-
-...
-
-
-```
+Here, we make assertions the results of the test.  If it took over 20 seconds to serve 1000 requests, we'll throw an error!  This is useful for automated testing.
 
 Try some examples yourself:
 
