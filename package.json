@@ -1,4 +1,23 @@
 {
+	"name": "arete",
+	"version": "0.1.0",
+	"description": "load testing for APIs and websites using node.  tastes great with mocha",
+	"keywords": [
+		"load",
+		"load testing",
+		"stress",
+		"mocha"
+	],
+	"author": {
+		"name": "Gordon Zheng",
+		"email": "technix1@gmail.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:capablemonkey/arete.git"
+	},
+	"main": "./index",
+	"license": "MIT",
   "dependencies": {
     "clone": "^0.1.17",
     "exec-time": "git+https://github.com/capablemonkey/exec-time#e39279713fcb87a9c9e27f5a81d913d7b6853c3d",
