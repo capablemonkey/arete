@@ -10,7 +10,7 @@ describe('Hacker News', function() {
 		arete.loadTest({
 			name: 'hn-1000',
 			requests: 1000,
-			concurrentRequests: 50,
+			concurrentRequests: 100,
 			targetFunction: function(callback) {
 				request('https://news.ycombinator.com/', function(error, response, body) {
 					callback(error, body);

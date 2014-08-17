@@ -12,7 +12,7 @@ Easily write a batch of load tests and organize them with `mocha`.
 
 Let's make 1000 GET requests to `https://news.ycombinator.com/`:
 
-```
+```javascript
 var arete = require('arete');
 var request = require('request');
 
@@ -29,7 +29,7 @@ arete.loadTest({
 });
 ```
 
-When we run this, we'll start making those requests...
+When we run this, we'll start making those requests with 100 simultaneous connections.
 
 ```
 hn-1000 - Begin profiling
@@ -56,23 +56,25 @@ Notice that the responses won't necessarily come in the order which they were se
 When all the responses have arrived, we spit out a report:
 
 ```
- === LOOK MA', STATS! ===
-50 requests fired, of which we got back 50 successful responses (100.00% success rate)
+  === LOOK MA', STATS! ===
+1000 requests fired, of which we got back 1000 successful responses (100.00% success rate)
 
-Longest time between responses:  419.238441 ms
-Shortest time between responses:  0.70436 ms
-Average response time interval:  19.629927020000004 ms
+Longest time between responses:  9068.144714 ms
+Shortest time between responses:  0.501181 ms
+Average response time interval:  17.516753117000015 ms
 
-Shortest response time:  434.612736 ms
-Longest response time:  1003.092273 ms
-Average response time:  679.37676786 ms
+Shortest response time:  9299.561894 ms
+Longest response time:  17852.305813 ms
+Average response time:  13732.966533506997 ms
 
-Total test duration:  1003.092273 ms
+Total test duration:  17852.305813 ms
 ```
+
+### Mocha
 
 Here's a mocha test suite which uses arete and the `google-autocomplete` module to query Google's search suggestion service 1000 times.
 
-```
+```javascript
 var arete = require('arete');
 var autocomplete = require('google-autocomplete');
 
