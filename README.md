@@ -8,6 +8,8 @@ Designed to let you easily use a library to make your requests, whether that's a
 
 Easily write a batch of load tests and organize them with `mocha`.
 
+`npm install arete`
+
 ## Example
 
 Let's make 1000 GET requests to `https://news.ycombinator.com/`:
