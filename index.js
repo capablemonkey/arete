@@ -95,6 +95,7 @@ function executeRequests(testName, numIterations, printResponses, printSteps, ta
 	profiler.step('All requests fired off');
 }
 
+// calculate some statistics based on results.  all times in ms.
 function calculateStats(results) {
 	var report = {
 		results: results,
@@ -102,9 +103,10 @@ function calculateStats(results) {
 		shortestResponseTimeInterval: _.min(results, function(result){ return result.timeSinceLastResponse;}).timeSinceLastResponse,
 		averageResponseTimeInterval: _.reduce(results, function(prev, curr){ return prev + curr.timeSinceLastResponse; }, 0) / results.length,
 		successfulResponses: _.where(results, {success: true}),
-		shortestResponseTime: _.min(results, function(result){ return result.timeSinceBeginning;}),
-		longestResponseTime:  _.max(results, function(result){ return result.timeSinceBeginning;}),
-		averageResponseTime: _.reduce(results, function(prev, curr){ return prev + curr.timeSinceBeginning; }, 0) / results.length
+		shortestResponseTime: _.min(results, function(result){ return result.timeSinceBeginning;}).timeSinceBeginning,
+		longestResponseTime:  _.max(results, function(result){ return result.timeSinceBeginning;}).timeSinceBeginning,
+		averageResponseTime: _.reduce(results, function(prev, curr){ return prev + curr.timeSinceBeginning; }, 0) / results.length,
+		timeElapsed: _.max(results, function(result){ return result.timeSinceBeginning;}).timeSinceBeginning
 	};
 
 	return report;
@@ -124,9 +126,11 @@ function outputReport(report) {
 	console.log('Shortest time between responses: ', report.shortestResponseTimeInterval, 'ms');
 	console.log('Average response time interval: ', report.averageResponseTimeInterval , 'ms');
 	console.log(' ');
-	console.log('Shortest response time: ', report.shortestResponseTime.timeSinceBeginning, 'ms');
-	console.log('Longest response time: ', report.longestResponseTime.timeSinceBeginning, 'ms');
+	console.log('Shortest response time: ', report.shortestResponseTime, 'ms');
+	console.log('Longest response time: ', report.longestResponseTime, 'ms');
 	console.log('Average response time: ', report.averageResponseTime , 'ms');
+	console.log(' ')
+	console.log('Total test duration: ', report.timeElapsed, 'ms');
 }
 
 module.exports = {

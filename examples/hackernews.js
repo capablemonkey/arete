@@ -1,6 +1,6 @@
 var arete = require('../index.js');
 var request = require('request');
-
+var assert = require('assert');
 
 // Try 1000 requests against google autocomplete, for comparison:
 
@@ -19,7 +19,12 @@ describe('Hacker News', function() {
 			printResponses: false,
 			printReport: true,
 			printSteps: true,
-			callback: done
+			callback: function(error, report) {				
+				assert.equal(report.successfulResponses.length, report.results.length, "We didn't get all successful responses!");
+				assert(report.averageResponseTimeInterval < 100, "Time between responses is way too long!");
+				assert(report.timeElapsed < 20000, "Unacceptable amount of time for 1000 requests to complete: 20 seconds");
+				done();
+			}
 		});
 	});
 });

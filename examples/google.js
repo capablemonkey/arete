@@ -1,7 +1,7 @@
 var arete = require('../index.js');
 var autocomplete = require('google-autocomplete');
 
-// Try 1000 requests against google autocomplete, for comparison:
+// Try 1000 requests against google autocomplete
 
 describe('Google Autocomplete', function() {
 	it('1000 queries to Google autocomplete', function(done) {
@@ -17,5 +17,6 @@ describe('Google Autocomplete', function() {
 			printReport: true,
 			callback: done
 		});
+
 	});
 });

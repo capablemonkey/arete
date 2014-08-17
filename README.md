@@ -10,13 +10,33 @@ Easily write a batch of load tests and organize them with `mocha`.
 
 ## Example
 
+```
+var arete = require('arete');
+var request = require('request');
+
+arete.loadTest({
+  name: 'hn-1000',
+  requests: 50,
+  concurrentRequests: 50,
+  targetFunction: function(callback) {
+    request('https://news.ycombinator.com/', function(error, response, body) {
+      callback(error, body);
+    })
+  },
+  printResponses: false,
+  printReport: true,
+  printSteps: true,
+  callback: function() {}
+});
+```
+
 Here's a mocha test suite which uses arete and the `google-autocomplete` module to query Google's search suggestion service 1000 times.
 
 ```
 var arete = require('arete');
 var autocomplete = require('google-autocomplete');
 
-// Try 1000 requests against google autocomplete, for comparison:
+// Try 1000 requests against google autocomplete
 
 describe('Google Autocomplete', function() {
   it('1000 queries to Google autocomplete', function(done) {
@@ -31,6 +51,7 @@ describe('Google Autocomplete', function() {
       printResponses: false,
       callback: done
     });
+
   });
 });
 ```
